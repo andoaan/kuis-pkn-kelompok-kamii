@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      padding: 30px;
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 60%;
+    }
+    th, td {
+      border: 1px solid #00796b;
+      padding: 10px;
+    }
+    th {
+      background-color: #00796b;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #e0f2f1;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Leaderboard Kuis PPKn</h2>
+<table id="leaderboardTable">
+  <thead>
+    <tr>
+      <th>Nama</th>
+      <th>Skor</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script>
+fetch("https://sheetdb.io/api/v1/goiax8iifioc7")
+  .then(response => response.json())
+  .then(data => {
+    const sorted = data.sort((a, b) => b.Skor - a.Skor);
+    const tbody = document.querySelector("#leaderboardTable tbody");
+    sorted.forEach(item => {
+      const row = `<tr><td>${item.Nama}</td><td>${item.Skor}</td></tr>`;
+      tbody.innerHTML += row;
+    });
+  });
+</script>
+
+</body>
+</html>
