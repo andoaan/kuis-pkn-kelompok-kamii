@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Leaderboard Kuis PPKn</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f4c3;
+      text-align: center;
+      padding: 40px;
+    }
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 80%;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background-color: #8bc34a;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f1f8e9;
+    }
+  </style>
+</head>
+<body>
+  <h2>Leaderboard Kuis PPKn</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Peringkat</th>
+        <th>Nama</th>
+        <th>Skor</th>
+      </tr>
+    </thead>
+    <tbody id="leaderboardBody"></tbody>
+  </table>
+  <br>
+  <a href="index.html"><button>Kembali ke Kuis</button></a>
+
+  <script>
+    fetch("https://sheetdb.io/api/v1/goiax8iifioc7")
+      .then(res => res.json())
+      .then(data => {
+        const sorted = data.sort((a, b) => b.Skor - a.Skor);
+        const tbody = document.getElementById("leaderboardBody");
+        sorted.forEach((item, index) => {
+          const row = `<tr>
+            <td>${index + 1}</td>
+            <td>${item.Nama}</td>
+            <td>${item.Skor}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      });
+  </script>
+</body>
+</html>

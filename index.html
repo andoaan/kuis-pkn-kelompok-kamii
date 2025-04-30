@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuis PPKn Interaktif</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #e0f7fa;
+      padding: 30px;
+    }
+    .quiz-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      display: inline-block;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: none;
+      background: #00796b;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #004d40;
+    }
+  </style>
+</head>
+<body>
+
+<div class="quiz-box" id="quizBox">
+  <h2>Masukkan Nama Kamu</h2>
+  <input type="text" id="nameInput" placeholder="Nama lengkap">
+  <br><br>
+  <button onclick="startQuiz()">Mulai Kuis</button>
+</div>
+
+<script>
+const questions = [
+  { question: "Apa lambang sila pertama?", options: ["Bintang", "Rantai", "Pohon Beringin", "Banteng"], answer: "Bintang" },
+  { question: "Apa arti warna putih dalam bendera Indonesia?", options: ["Keberanian", "Kesucian", "Kesejahteraan", "Kekuatan"], answer: "Kesucian" },
+  { question: "Siapa yang merumuskan Pancasila?", options: ["Soekarno", "Hatta", "Soeharto", "Tan Malaka"], answer: "Soekarno" }
+];
+
+let current = 0;
+let score = 0;
+let playerName = "";
+
+function startQuiz() {
+  const input = document.getElementById("nameInput").value;
+  if (!input) return alert("Nama tidak boleh kosong!");
+  playerName = input;
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[current];
+  document.getElementById("quizBox").innerHTML = `
+    <h3>${q.question}</h3>
+    ${q.options.map(opt => `<button onclick="checkAnswer('${opt}')">${opt}</button><br>`).join("")}
+  `;
+}
+
+function checkAnswer(opt) {
+  if (opt === questions[current].answer) score++;
+  current++;
+  if (current < questions.length) {
+    showQuestion();
+  } else {
+    submitScore();
+  }
+}
+
+function submitScore() {
+  const data = {
+    data: [{ Nama: playerName, Skor: score }]
+  };
+
+  fetch("https://sheetdb.io/api/v1/goiax8iifioc7", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(() => {
+    document.getElementById("quizBox").innerHTML = `
+      <h2>Kuis selesai!</h2>
+      <p>Skor kamu: ${score} dari ${questions.length}</p>
+      <a href="leaderboard.html"><button>Lihat Leaderboard</button></a>
+    `;
+  });
+}
+</script>
+
+</body>
+</html>
